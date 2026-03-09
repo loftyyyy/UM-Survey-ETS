@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "UM Survey Auto-Fill (ETS)",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Automates UM performance evaluation surveys with a user-friendly interface. Select a rating, add optional comments, and auto-submit.",
   "author": "Loftyyyy",
   "icons": {
@@ -10,6 +10,7 @@
     "128": "icons/icon128.png"
   },
   "action": {
+    "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
@@ -17,18 +18,10 @@
     },
     "default_title": "UM Survey Auto-Fill"
   },
-  "side_panel": {
-    "default_path": "sidepanel/sidepanel.html"
-  },
-  "background": {
-    "service_worker": "background.js"
-  },
   "permissions": [
     "activeTab",
     "scripting",
-    "storage",
-    "sidePanel",
-    "tabs"
+    "storage"
   ],
   "host_permissions": [
     "https://mis.umin.edu.ph/*"
