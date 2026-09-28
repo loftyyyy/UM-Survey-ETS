@@ -30,50 +30,69 @@
   function createFloatingControls() {
     const host = document.createElement('div');
     host.id = 'um-survey-auto-fill-controls';
-    host.style.cssText = 'position:fixed;right:20px;bottom:20px;z-index:2147483647;';
+    host.style.cssText = 'position:fixed;right:0;bottom:24px;z-index:2147483647;';
 
     const shadowRoot = host.attachShadow({ mode: 'closed' });
     shadowRoot.innerHTML = `
       <style>
         :host { all: initial; }
         * { box-sizing: border-box; }
-        .wrapper { font-family: Arial, sans-serif; color: #243447; }
+        .wrapper { position: relative; font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; }
         .panel {
-          display: none;
-          width: 286px;
-          margin-bottom: 10px;
-          padding: 16px;
-          border: 1px solid #d9e2ec;
-          border-radius: 10px;
+          position: absolute;
+          right: 0;
+          bottom: calc(100% + 12px);
+          width: 300px;
+          padding: 18px;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
           background: #ffffff;
-          box-shadow: 0 10px 28px rgba(36, 52, 71, 0.22);
+          box-shadow: 0 12px 30px rgba(30, 41, 59, 0.2);
+          opacity: 0;
+          pointer-events: none;
+          transform: translate(10px, 10px) scale(0.97);
+          transform-origin: bottom right;
+          transition: opacity 0.18s ease, transform 0.18s ease;
         }
-        .panel.open { display: block; }
-        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-        .title { margin: 0; font-size: 16px; font-weight: 700; }
-        .close { border: 0; padding: 2px 6px; background: transparent; color: #718096; font-size: 20px; line-height: 1; cursor: pointer; }
-        .label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 700; }
-        .ratings { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 14px; }
-        .rating { border: 1px solid #b8c5d3; border-radius: 6px; padding: 8px 0; background: #f8fafc; color: #243447; font-weight: 700; cursor: pointer; }
-        .rating.selected { border-color: #1769aa; background: #1769aa; color: #ffffff; }
-        .option { display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 13px; cursor: pointer; }
-        textarea { display: none; width: 100%; min-height: 58px; resize: vertical; margin: 5px 0 12px; border: 1px solid #b8c5d3; border-radius: 6px; padding: 8px; font: inherit; font-size: 12px; }
+        .panel::after { position: absolute; right: 22px; bottom: -9px; width: 16px; height: 16px; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; background: #ffffff; content: ''; transform: rotate(45deg); }
+        .panel.open { opacity: 1; pointer-events: auto; transform: translate(0, 0) scale(1); }
+        .panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .brand-mark { width: 30px; height: 30px; border-radius: 8px; background: #7b2d26; box-shadow: 0 3px 8px rgba(123, 45, 38, 0.25); }
+        .heading { flex: 1; }
+        .title { margin: 0; color: #7b2d26; font-size: 15px; font-weight: 700; letter-spacing: 0; }
+        .subtitle { margin: 3px 0 0; color: #64748b; font-size: 10px; }
+        .close { width: 26px; height: 26px; border: 0; border-radius: 50%; padding: 0; background: #f4e6e4; color: #64748b; font-size: 18px; line-height: 1; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; }
+        .close:hover, .close:focus-visible { background: #7b2d26; color: #ffffff; outline: none; }
+        .label { display: block; margin-bottom: 9px; color: #1e293b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .ratings { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 18px; }
+        .rating { border: 1px solid #e2e8f0; border-radius: 8px; padding: 9px 0; background: #f8fafc; color: #1e293b; font-size: 13px; font-weight: 700; cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+        .rating:hover, .rating:focus-visible { border-color: #7b2d26; background: #f4e6e4; outline: none; transform: translateY(-1px); }
+        .rating.selected { border-color: #7b2d26; background: #f4e6e4; color: #7b2d26; box-shadow: 0 0 0 1px #7b2d26; }
+        .option { display: flex; align-items: center; gap: 8px; margin: 12px 0; color: #1e293b; font-size: 12px; cursor: pointer; }
+        textarea { display: none; width: 100%; min-height: 64px; resize: vertical; margin: 4px 0 14px; border: 2px solid #e2e8f0; border-radius: 8px; padding: 9px; background: #ffffff; color: #1e293b; font: inherit; font-size: 12px; }
         textarea.open { display: block; }
-        .fill { width: 100%; border: 0; border-radius: 6px; padding: 10px; background: #1769aa; color: #ffffff; font-weight: 700; cursor: pointer; }
-        .fill:disabled { background: #a0aec0; cursor: not-allowed; }
-        .status { min-height: 16px; margin: 10px 0 0; color: #52606d; font-size: 11px; line-height: 1.35; }
-        .toggle { position: relative; width: 42px; height: 22px; margin-left: auto; }
+        textarea:focus { border-color: #7b2d26; box-shadow: 0 0 0 3px rgba(123, 45, 38, 0.12); outline: none; }
+        .fill { width: 100%; border: 0; border-radius: 8px; padding: 11px; background: #7b2d26; color: #ffffff; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
+        .fill:hover, .fill:focus-visible { background: #5e211c; box-shadow: 0 4px 10px rgba(123, 45, 38, 0.28); outline: none; transform: translateY(-1px); }
+        .fill:disabled { background: #e2e8f0; color: #64748b; box-shadow: none; cursor: not-allowed; transform: none; }
+        .status { min-height: 16px; margin: 10px 0 0; color: #64748b; font-size: 11px; line-height: 1.35; }
+        .toggle { position: relative; width: 40px; height: 22px; margin-left: auto; }
         .toggle input { position: absolute; opacity: 0; }
-        .track { display: block; width: 42px; height: 22px; border-radius: 11px; background: #cbd5e0; cursor: pointer; }
+        .track { display: block; width: 40px; height: 22px; border-radius: 11px; background: #e2e8f0; cursor: pointer; transition: background 0.15s ease; }
         .track::after { display: block; width: 18px; height: 18px; margin: 2px; border-radius: 50%; background: #ffffff; content: ''; transition: transform 0.15s ease; }
-        .toggle input:checked + .track { background: #1769aa; }
-        .toggle input:checked + .track::after { transform: translateX(20px); }
-        .launcher { border: 0; border-radius: 22px; padding: 12px 16px; background: #1769aa; color: #ffffff; box-shadow: 0 5px 14px rgba(23, 105, 170, 0.35); font: 700 13px Arial, sans-serif; cursor: pointer; }
+        .toggle input:focus-visible + .track { box-shadow: 0 0 0 3px rgba(123, 45, 38, 0.18); }
+        .toggle input:checked + .track { background: #7b2d26; }
+        .toggle input:checked + .track::after { transform: translateX(18px); }
+        .launcher { display: inline-flex; align-items: center; gap: 8px; border: 2px solid #ffffff; border-right: 0; border-radius: 24px 0 0 24px; padding: 10px 15px 10px 10px; background: #7b2d26; color: #ffffff; box-shadow: 0 6px 16px rgba(123, 45, 38, 0.32); font: 700 12px 'Segoe UI', system-ui, sans-serif; cursor: pointer; transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
+        .launcher::before { display: grid; width: 23px; height: 23px; place-items: center; border-radius: 50%; background: #f4e6e4; color: #7b2d26; content: 'UM'; font-size: 8px; font-weight: 800; }
+        .launcher:hover, .launcher:focus-visible { background: #5e211c; box-shadow: 0 8px 20px rgba(123, 45, 38, 0.4); outline: none; transform: translateX(-2px); }
+        @media (max-width: 480px) { .panel { width: min(300px, calc(100vw - 32px)); } }
       </style>
       <div class="wrapper">
         <section class="panel" aria-label="UM Survey Auto-Fill">
           <div class="panel-header">
-            <h2 class="title">UM Survey Auto-Fill</h2>
+            <img class="brand-mark" src="${chrome.runtime.getURL('icons/icon128.png')}" alt="UM">
+            <div class="heading"><h2 class="title">UM Survey Auto-Fill</h2><p class="subtitle">Course evaluation assistant</p></div>
             <button class="close" type="button" aria-label="Close">&times;</button>
           </div>
           <span class="label">Select rating</span>

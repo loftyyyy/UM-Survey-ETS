@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const url = tab.url;
       const isEts = url.match(/https:\/\/mis\.umin\.edu\.ph\/oPEAS\/ets\/ug\/.*/);
       const isCa = url.match(/https:\/\/mis\.umin\.edu\.ph\/oPEAS\/ca\/ug\/.*/);
-      const isUmPass = url.match(/https:\/\/mis\.umin\.edu\.ph\/oPEAS\/um-pass\/courseassessment\/student\/[^/]+\/answer(?:\?.*)?$/);
+      const isUmPass = url.match(/https:\/\/mis\.umin\.edu\.ph\/oPEAS\/um-pass\/(?:courseassessment|performanceevaluation)\/student\/[^/]+\/answer(?:\?.*)?$/);
 
       if (isEts || isCa || isUmPass) {
         isOnSurveyPage = true;

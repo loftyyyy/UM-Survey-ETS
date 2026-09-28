@@ -26,6 +26,12 @@
   "host_permissions": [
     "https://mis.umin.edu.ph/*"
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/icon128.png"],
+      "matches": ["https://mis.umin.edu.ph/*"]
+    }
+  ],
   "content_scripts": [
     {
       "matches": [
