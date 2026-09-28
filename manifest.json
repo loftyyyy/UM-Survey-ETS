@@ -30,7 +30,8 @@
     {
       "matches": [
         "https://mis.umin.edu.ph/oPEAS/ets/ug/*/*/*",
-        "https://mis.umin.edu.ph/oPEAS/ca/ug/*/*/*"
+        "https://mis.umin.edu.ph/oPEAS/ca/ug/*/*/*",
+        "https://mis.umin.edu.ph/oPEAS/um-pass/*/*/*/*"
       ],
       "js": ["content/content.js"],
       "run_at": "document_idle"

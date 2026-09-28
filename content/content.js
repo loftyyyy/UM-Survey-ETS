@@ -92,7 +92,7 @@
 
     allRadios.forEach((radio) => {
       const name = radio.name;
-      if (name) {
+      if (name && /^rating_\d+$/.test(name)) {
         if (!radioGroups.has(name)) {
           radioGroups.set(name, []);
         }
@@ -105,8 +105,7 @@
       let clicked = false;
       radios.forEach((radio) => {
         if (radio.value === value) {
-          radio.checked = true;
-          radio.click();
+          clickRadio(radio);
 
           // Dispatch change event for any JS listeners on the page
           radio.dispatchEvent(new Event('change', { bubbles: true }));
@@ -120,6 +119,28 @@
     });
 
     return filledCount;
+  }
+
+  /**
+   * Activate a radio button, including radios enhanced by the iCheck plugin.
+   * @param {HTMLInputElement} radio - Radio input to activate
+   */
+  function clickRadio(radio) {
+    const iCheckContainer = radio.closest('.iradio_flat-blue, .iradio');
+    const iCheckHelper = iCheckContainer?.querySelector('.iCheck-helper');
+
+    if (iCheckHelper) {
+      iCheckHelper.click();
+      return;
+    }
+
+    const label = radio.closest('label');
+    if (label) {
+      label.click();
+      return;
+    }
+
+    radio.click();
   }
 
   /**
