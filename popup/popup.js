@@ -59,12 +59,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab && tab.url) {
-      const url = tab.url;
-      const isEts = url.match(/https:\/\/mis\.umin\.edu\.ph\/oPEAS\/ets\/ug\/.*/);
-      const isCa = url.match(/https:\/\/mis\.umin\.edu\.ph\/oPEAS\/ca\/ug\/.*/);
-      const isUmPass = url.match(/https:\/\/mis\.umin\.edu\.ph\/oPEAS\/um-pass\/(?:courseassessment|performanceevaluation)\/student\/[^/]+\/answer(?:\?.*)?$/);
+      const url = new URL(tab.url);
+      const isEts = /^\/oPEAS\/ets\/ug\/.*/.test(url.pathname) && url.origin === 'https://mis.umin.edu.ph';
+      const isCa = /^\/oPEAS\/ca\/ug\/.*/.test(url.pathname) && url.origin === 'https://mis.umin.edu.ph';
+      const isUmPass = url.origin === 'https://mis.umin.edu.ph' &&
+        /^\/oPEAS\/um-pass\/(?:courseassessment|performanceevaluation)\/student\/[^/]+\/answer$/.test(url.pathname);
+      const isFeedbackForm = url.origin === 'https://umpass.umindanao.edu.ph' &&
+        /^\/feedback-form\/(?:evaluation|course-assessment|survey)\/answer$/.test(url.pathname);
 
-      if (isEts || isCa || isUmPass) {
+      if (isEts || isCa || isUmPass || isFeedbackForm) {
         isOnSurveyPage = true;
         pageDot.classList.add('active');
         pageStatusText.textContent = 'Survey page detected';

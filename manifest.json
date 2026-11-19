@@ -24,12 +24,16 @@
     "storage"
   ],
   "host_permissions": [
-    "https://mis.umin.edu.ph/*"
+    "https://mis.umin.edu.ph/*",
+    "https://umpass.umindanao.edu.ph/*"
   ],
   "web_accessible_resources": [
     {
       "resources": ["icons/icon128.png"],
-      "matches": ["https://mis.umin.edu.ph/*"]
+      "matches": [
+        "https://mis.umin.edu.ph/*",
+        "https://umpass.umindanao.edu.ph/*"
+      ]
     }
   ],
   "content_scripts": [
@@ -37,7 +41,10 @@
       "matches": [
         "https://mis.umin.edu.ph/oPEAS/ets/ug/*/*/*",
         "https://mis.umin.edu.ph/oPEAS/ca/ug/*/*/*",
-        "https://mis.umin.edu.ph/oPEAS/um-pass/*/*/*/*"
+        "https://mis.umin.edu.ph/oPEAS/um-pass/*/*/*/*",
+        "https://umpass.umindanao.edu.ph/feedback-form/evaluation/answer*",
+        "https://umpass.umindanao.edu.ph/feedback-form/course-assessment/answer*",
+        "https://umpass.umindanao.edu.ph/feedback-form/survey/answer*"
       ],
       "js": ["content/content.js"],
       "run_at": "document_idle"

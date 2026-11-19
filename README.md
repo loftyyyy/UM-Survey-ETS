@@ -11,7 +11,8 @@ Chrome extension that automates UM performance evaluation surveys. Select a rati
 
 ## Usage
 
-1. Navigate to a UM evaluation survey page (`mis.umin.edu.ph/oPEAS/...`)
+1. Navigate to a UM evaluation survey page (`mis.umin.edu.ph/oPEAS/...` or
+   `umpass.umindanao.edu.ph/feedback-form/{evaluation,course-assessment,survey}/answer`)
 2. Click the extension icon in the toolbar
 3. Select a rating (5 = Excellent, 4 = Very Satisfactory, 3 = Satisfactory, 2 = Below Satisfactory, 1 = Needs Improvement)
 4. (Optional) Toggle **Include Comment** and type a message
