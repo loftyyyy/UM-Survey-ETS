@@ -296,6 +296,25 @@
       }
     });
 
+    // Strategy 2: UM-PASS renders each question as a button toggle instead
+    // of radio inputs. Click the matching rating within every question group.
+    if (filledCount === 0) {
+      const ratingGroups = document.querySelectorAll('[aria-label^="Rating for question "]');
+
+      ratingGroups.forEach((group) => {
+        const ratingButton = Array.from(group.querySelectorAll('.rating-option'))
+          .find((button) => {
+            const label = button.getAttribute('aria-label') || '';
+            return label.startsWith(`${value} -`);
+          });
+
+        if (ratingButton) {
+          ratingButton.click();
+          filledCount++;
+        }
+      });
+    }
+
     return filledCount;
   }
 
